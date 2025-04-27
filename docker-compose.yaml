@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: portfolio-app:1.0
+    ports:
+      - "8080:8080"
+    environment:
+      - NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
