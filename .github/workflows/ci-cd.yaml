@@ -27,11 +27,11 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/portfolio-app-v1-frontend:latest
+          tags: mikolo01/portfolio-app-v1-frontend:latest
 
       - name: Build and push backend
         uses: docker/build-push-action@v5
         with:
           context: ./backend
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/portfolio-app-v1-backend:latest
+          tags: mikolo01/portfolio-app-v1-backend:latest
