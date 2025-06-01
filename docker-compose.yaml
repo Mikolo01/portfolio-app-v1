@@ -1,13 +1,38 @@
 version: '3.8'
-
 services:
-  web:
-    build: .
-    container_name: portfolio-app:1.0
+  frontend:
+    build: ./frontend
     ports:
-      - "8080:8080"
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "5005:5000"
+    depends_on:
+      - database
     environment:
-      - NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
-    security_opt:
-      - no-new-privileges:true
-    restart: unless-stopped
+      - DB_HOST=database
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=portfolio
+      - DB_PORT=5432
+
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: portfolio
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  pgdata:
