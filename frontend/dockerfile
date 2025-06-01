@@ -1,12 +1,23 @@
-# Use official Node.js image
-FROM node:18-alpine
+# Use an official Node.js image
+FROM node:18-alpine AS build
 
+# Set working directory
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
+# Install dependencies
+COPY package*.json ./
 RUN npm install
 
+# Copy app source code
 COPY . .
 
-EXPOSE 3000
-CMD ["npm", "start"]
+# Build the React app
+RUN npm run build
+
+# Use Nginx to serve the build
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
