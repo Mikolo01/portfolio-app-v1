@@ -1,8 +1,9 @@
-This is a simple website showcasing my portfolio as a DevSecOps Engineer. It includes my resume, projects, and contact information. 
-The website is built using HTML and is hosted on an Nginx server. The Dockerfile provided sets up the Nginx server with security best practices and custom configurations.
+This is a simple website showcasing my portfolio as a DevOps Engineer. It includes my resume, projects, and contact information. 
+The website is built using javascript and HTML running on React App. 
+This is for development purpose.
+A modified version would be for production purpose and would have key features listed below
 
-
-Key Security Features:
+Security Features:
 
 Docker Security: Non-root user execution, Minimal Alpine base image, Regular security updates, Restricted privileges
 
