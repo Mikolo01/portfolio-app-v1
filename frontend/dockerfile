@@ -1,23 +1,20 @@
-# Use an official Node.js image
-FROM node:18-alpine AS build
+FROM node:18-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies first for better caching
 COPY package*.json ./
 RUN npm install
 
-# Copy app source code
+# Copy the rest of the application
 COPY . .
 
-# Build the React app
-RUN npm run build
+# Add necessary environment variables
+ENV NODE_ENV=development
+ENV WATCHPACK_POLLING=true
+ENV CHOKIDAR_USEPOLLING=true
 
-# Use Nginx to serve the build
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 3000
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-
+# Use a shell form to ensure proper signal handling
+CMD npm start
