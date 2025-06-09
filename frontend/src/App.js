@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="container">
       <header>
-        <h1>Mikolo01 | DevOps & Cloud Security Engineer</h1>
+        <h1>DevOps & Cloud Security Engineer</h1>
         <p>Designing scalable, secure infrastructure and CI/CD pipelines.</p>
       </header>
 
@@ -33,12 +33,12 @@ function App() {
 
       <section>
         <h2>Contact</h2>
-        <p>Email: mikolo@example.com</p>
+        <p>Email: mcolowoyeye2010@gmail.com</p>
         <p>GitHub: <a href="https://github.com/Mikolo01" target="_blank" rel="noopener noreferrer">Mikolo01</a></p>
       </section>
 
       <footer>
-        <p>© {new Date().getFullYear()} Mikolo01</p>
+        <p>© {new Date().getFullYear()} Michael Olowoyeye</p>
       </footer>
     </div>
   );

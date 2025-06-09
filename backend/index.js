@@ -1,27 +1,53 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { Pool } = require('pg');
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const cors = require("cors");
 
+// Initialize Express app
 const app = express();
+
+// Middleware
 app.use(cors());
+app.use(express.json());
 
-const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'password',
-  database: process.env.DB_NAME || 'portfolio',
-  port: process.env.DB_PORT || 5432,
+// Set up storage for uploaded files
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "uploads")); // Directory where files will be saved
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`); // Rename file to include a timestamp
+  },
 });
 
-app.get('/api', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT NOW()');
-    res.json({ message: `Hello from backend! Time: ${result.rows[0].now}` });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+// Multer configuration
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+});
+
+// Endpoint for file uploads
+app.post("/upload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No file uploaded.");
   }
+  res.status(200).send({
+    message: "File uploaded successfully!",
+    filename: req.file.filename,
+    filepath: `/uploads/${req.file.filename}`,
+  });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+// Serve uploaded files as static assets
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Healthcheck route
+app.get("/", (req, res) => {
+  res.send("Backend is running!");
+});
+
+// Start server
+const PORT = process.env.PORT || 5002;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
